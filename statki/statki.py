@@ -1,32 +1,31 @@
 from random import randint
 
 
-def check(maszty, poz_x, poz_y, kierunek):
-    zbior = [1, 2, 3, 4, 5, "1", "2", "3", "4", "5"]
+def check(ships, poz_x, poz_y, direction):
+    all_ships = [1, 2, 3, 4]
     x = poz_x
     y = poz_y
-    puste = False
-    for i in range(maszty):
-        if kierunek == 4 and 0 <= (poz_y + 1) - maszty < poz_y + 1:
+    free = False
+    for i in range(ships):
+        if direction == 4 and 0 <= poz_y - ships:
             y = poz_y - i
-        elif kierunek == 2 and (poz_x + 1) + maszty <= 9 and poz_x > poz_x - maszty:
+        elif direction == 2 and poz_x + ships <= 9:
             x = poz_x + i
-        elif kierunek == 6 and 9 >= (poz_y + 1) + maszty > poz_y + 1:
+        elif direction == 6 and 9 >= poz_y + ships:
             y = poz_y + i
-        elif kierunek == 8 and (poz_x + 1) - maszty >= 0 and poz_x < poz_x + maszty:
+        elif direction == 8 and poz_x - ships >= 0:
             x = poz_x - i
         else:
-            return puste
-        try:
-            if plansza[x][y + 1] in zbior or plansza[x][y - 1] in zbior or plansza[x - 1][y - 1] in zbior or \
-                    plansza[x + 1][y - 1] in zbior or plansza[x + 1][y] in zbior or plansza[x - 1][y] in zbior or \
-                    plansza[x + 1][y + 1] in zbior or plansza[x - 1][y + 1] in zbior or plansza[x][y] in zbior:
-                return False
-            else:
-                puste = True
-        except:
+            return free
+
+        if play_board[x][y + 1] in all_ships or play_board[x][y - 1] in all_ships or play_board[x - 1][y - 1] in all_ships or \
+                play_board[x + 1][y - 1] in all_ships or play_board[x + 1][y] in all_ships or play_board[x - 1][y] in all_ships or \
+                play_board[x + 1][y + 1] in all_ships or play_board[x - 1][y + 1] in all_ships or play_board[x][y] in all_ships:
             return False
-    return puste
+        else:
+            free = True
+
+    return free
 
 
 def drukuj_plansze(plansza):
@@ -42,34 +41,34 @@ def drukuj_plansze(plansza):
 
 
 def los_kierunku():
-    kierunek = 1
-    while kierunek % 2 != 0:
-        kierunek = randint(2, 8)
-    return kierunek
+    direction = 1
+    while direction % 2 != 0:
+        direction = randint(2, 8)
+    return direction
 
 
-def masztowiec(maszty):
-    sukces = False
+def create_ship(ships):
+    success = False
     poz_x = randint(0, 9)
     poz_y = randint(0, 9)
 
-    kierunek = los_kierunku()
-    while not sukces:
+    direction = los_kierunku()
+    while not success:
         try:
-            if check(maszty, poz_x, poz_y, kierunek):
-                for i in range(maszty):
-                    if kierunek == 4:
-                        plansza[poz_x][poz_y - i] = maszty
-                        sukces = True
-                    elif kierunek == 6:
-                        plansza[poz_x][poz_y + i] = maszty
-                        sukces = True
-                    elif kierunek == 2:
-                        plansza[poz_x + i][poz_y] = maszty
-                        sukces = True
-                    elif kierunek == 8:
-                        plansza[poz_x - i][poz_y] = maszty
-                        sukces = True
+            if check(ships, poz_x, poz_y, direction):
+                for i in range(ships):
+                    if direction == 4:
+                        play_board[poz_x][poz_y - i] = ships
+                        success = True
+                    elif direction == 6:
+                        play_board[poz_x][poz_y + i] = ships
+                        success = True
+                    elif direction == 2:
+                        play_board[poz_x + i][poz_y] = ships
+                        success = True
+                    elif direction == 8:
+                        play_board[poz_x - i][poz_y] = ships
+                        success = True
             else:
                 poz_x = randint(0, 9)
                 poz_y = randint(0, 9)
@@ -77,22 +76,22 @@ def masztowiec(maszty):
             continue
 
 
-plansza = [[0] * 10 for i in range(10)]
+play_board = [[0] * 11 for i in range(11)]
 
 for i in range(10):
     for j in range(10):
-        plansza[i][j] = "-"
+        play_board[i][j] = ""
 
-masztowiec(4)
-masztowiec(3)
-masztowiec(3)
-masztowiec(2)
-masztowiec(2)
-masztowiec(2)
-masztowiec(1)
-masztowiec(1)
-masztowiec(1)
-masztowiec(1)
+create_ship(4)
+create_ship(3)
+create_ship(3)
+create_ship(2)
+create_ship(2)
+create_ship(2)
+create_ship(1)
+create_ship(1)
+create_ship(1)
+create_ship(1)
 
 print()
-drukuj_plansze(plansza)
+drukuj_plansze(play_board)
