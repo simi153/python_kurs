@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .border {border: 1px solid grey;}
+    .td {align: center;}
+</style>
+<table>
+    <tr>
+        <th>Operation</th>
+        <th width="60">a</th>
+        <th width="60">b</th>
+        <th width="150">data</th>
+    </tr>
+
+    {% for el in elements %}
+       <tr>
+        <td>{{ el.operation }}</td>
+        <td>{{ el.a }}</td>
+        <td>{{ el.b }}</td>
+        <td>{{ el.created }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
